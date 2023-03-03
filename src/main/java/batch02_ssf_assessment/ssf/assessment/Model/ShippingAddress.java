@@ -1,15 +1,18 @@
 package batch02_ssf_assessment.ssf.assessment.Model;
 
+import jakarta.json.JsonObject;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class ShippingAddress {
 
-    @NotNull(message = "Please enter your name")
+    @NotEmpty(message = "Please enter your name")
     @Size(min = 2, message = "Your name must be longer than 1 character")
     private String name;
 
-    @NotNull(message = "Please enter your address")
+    // @NotNull(message = "Please enter your address")
+    @NotEmpty(message = "Please enter your address")
     private String address;
 
     public String getName() {
@@ -33,4 +36,10 @@ public class ShippingAddress {
         return "ShippingAddress [name=" + name + ", address=" + address + "]";
     }
 
+    public static ShippingAddress create(JsonObject json){
+        ShippingAddress shippingAddress = new ShippingAddress();
+        shippingAddress.setName(json.getString("name"));
+        shippingAddress.setAddress(json.getString("address"));
+        return shippingAddress;
+    }
 }

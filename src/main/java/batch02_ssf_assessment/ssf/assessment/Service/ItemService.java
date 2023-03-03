@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-import batch02_ssf_assessment.ssf.assessment.Model.Cart;
+import batch02_ssf_assessment.ssf.assessment.Model.Item;
 
 @Service
-public class CartService {
+public class ItemService {
 
     public static final String[] ITEM_NAMES = {
             "apple", "orange", "bread", "cheese", "chicken", "mineral_water", "instant_noodles"
@@ -21,16 +21,16 @@ public class CartService {
 
     private final Set<String> itemNames;
 
-    public CartService() {
+    public ItemService() {
         itemNames = new HashSet<>(Arrays.asList(ITEM_NAMES));
     }
 
-    public List<ObjectError> validateCart(Cart item) {
+    public List<ObjectError> validateItem(Item name) {
         List<ObjectError> errors = new LinkedList<>();
         FieldError error;
 
-        if (!itemNames.contains(item.getItem().toLowerCase())) {
-            error = new FieldError("cart", "item", "We do not stock %s ".formatted(item.getItem()));
+        if (!itemNames.contains(name.getName().toLowerCase())) {
+            error = new FieldError("item", "name", "We do not stock %s ".formatted(name.getName()));
             errors.add(error);
         }
 

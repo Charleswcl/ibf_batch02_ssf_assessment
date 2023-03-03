@@ -10,10 +10,12 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+
 import batch02_ssf_assessment.ssf.assessment.Model.Cart;
 import batch02_ssf_assessment.ssf.assessment.Model.Confirmation;
+import batch02_ssf_assessment.ssf.assessment.Model.Item;
 import batch02_ssf_assessment.ssf.assessment.Model.ShippingAddress;
-import batch02_ssf_assessment.ssf.assessment.Service.CartService;
+import batch02_ssf_assessment.ssf.assessment.Service.ItemService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -21,52 +23,46 @@ import jakarta.validation.Valid;
 public class PurchaseOrderController {
 
     @Autowired
-    private CartService cartSvc;
-  
-    @GetMapping(path={"/", "/index.html"})
+    private ItemService itemSvc;
+
+    @GetMapping(path = { "/", "/view1" })
     public String getIndex(Model model) {
 
-        model.addAttribute("cart", new Cart());
-        return "index";
+        model.addAttribute("item", new Item());
+        return "view1";
     }
 
-    @GetMapping(path="/shippingaddress")
-    public String postCart(Model model, HttpSession session, @Valid Cart cart, BindingResult br) {
-        
-        if(br.hasErrors())
-        return "index";
-        
-        List<ObjectError> errors = cartSvc.validateCart(cart);
-		if (!errors.isEmpty()) {
-			for (ObjectError err: errors)
-				br.addError(err);
-			return "index";
-		}
+    @GetMapping(path = "/view2")
+    public String getCart(Model model, HttpSession session, @Valid Item Item, BindingResult br) {
 
-        session.setAttribute("cart", cart);
+        if (br.hasErrors())
+            return "view1";
+
+        List<ObjectError> errors = itemSvc.validateItem(Item);
+        if (!errors.isEmpty()) {
+            for (ObjectError err : errors)
+                br.addError(err);
+            return "view1";
+        }
+
+        session.setAttribute("item", Item);
 
         model.addAttribute("shippingaddress", new ShippingAddress());
 
-        return "shippingaddress";
+        return "view2";
     }
 
-    @PostMapping(path="/shippingaddress/confirmation")
-    public String cartConfirmation(Model model, HttpSession session, @Valid ShippingAddress shippingAddress, BindingResult br) {
-        
-        if(br.hasErrors())
-        return "shippingaddress";
-        
-        // List<ObjectError> errors = cartSvc.validateCart(cart);
-		// if (!errors.isEmpty()) {
-		// 	for (ObjectError err: errors)
-		// 		br.addError(err);
-		// 	return "index";
-		// }
+    @PostMapping(path = "/view2/view3")
+    public String cartConfirmation(Model model, HttpSession session, @Valid ShippingAddress shippingaddress,
+            BindingResult br) {
 
-        session.setAttribute("shippingaddress", shippingAddress);
+        if (br.hasErrors())
+            return "view2";
+
+        // Item item =(Item)session.getAttribute("item");
 
         model.addAttribute("confirmation", new Confirmation());
 
-        return "confirmation";
+        return "view3";
     }
 }

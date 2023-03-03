@@ -9,6 +9,6 @@
 
 .error {
     font-family: monospace;
-    color: red;
+    color: rgb(245, 13, 13);
     font-weight: bold;
 }
